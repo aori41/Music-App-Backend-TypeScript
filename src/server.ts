@@ -10,6 +10,7 @@ import { makeid } from './utils';
 const port = process.env.PORT || 3000;
 
 const saltRounds: number = 10; // salt rounds for bcrypt hash
+const dayMiliSeconds: number = 1000*60*60*24;
 
 const app: Application = express();
 
@@ -33,7 +34,7 @@ app.post('/api/login', async (req: Request, res: Response) => {
         res.status(401).json({ message: "Incorrect password" });
         return;
     }
-    const date: number = Date.now() + 86400000;
+    const date: number = Date.now() + dayMiliSeconds;
     let token: string = makeid(64);
     await tokensCollection.insertOne({ username, token, expDate: date });
     res.json({ message: "Login Successful", token });
@@ -63,7 +64,7 @@ app.post('/api/register', async (req: Request, res: Response) => {
         res.status(401).json({ message: "Email already exists" });
         return;
     }
-    const date: number = Date.now() + 86400000; // 24 hours
+    const date: number = Date.now() + dayMiliSeconds;
     let token: string = makeid(64);
     await tokensCollection.insertOne({ username, token, expDate: date });
     const hash: string = await bcrypt.hash(password, saltRounds); // encrypt password before saving
