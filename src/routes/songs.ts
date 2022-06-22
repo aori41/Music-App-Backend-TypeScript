@@ -166,7 +166,7 @@ async function searchByKeyWords(input: string): Promise<any> { // search options
     const matches: any[] = [];
     for (let i = 0; i < songs.length; i++) {
         let match: number = 0;
-        for (let g = 0; g < keyWords.length; g++) {
+        for (let g = 0; g < keyWords.length; g++) { // search the keywords in song titles
             const sTitle: string = songs[i].title.split(" ");
             for (let h = 0; h < sTitle.length; h++) {
                 const similar: number = similarPercent(keyWords[g], sTitle[h]);
@@ -174,7 +174,7 @@ async function searchByKeyWords(input: string): Promise<any> { // search options
                     match++;
                 }
             }
-            if (match < 1) {
+            if (match < 1) { // search artists with the key words
                 const sArtist: string = songs[i].artist.split(" ");
                 for (let h = 0; h < sArtist.length; h++) {
                     const similar: number = similarPercent(keyWords[g], sArtist[h]);
@@ -202,7 +202,7 @@ function similarPercent(str1: string, str2: string): number {
     for (let i = 0; i < minLength; i++) { // compare each letter
         if (str1[i].toLowerCase() == str2[i].toLowerCase()) similar++;
     }
-    return (similar / maxLength) * 100;
+    return (similar / maxLength) * 100; // returns similarity percantage
 }
 
 export default router;
