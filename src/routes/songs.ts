@@ -25,7 +25,7 @@ router.get('/songs', validateTokenAndGetUser, async (req: Request, res: Response
     }
     let artists: string = "";
     let genres: string = "";
-    for (let i = 0; i < matched.length; i++) {
+    for (let i = 0; i < matched.length; i++) { // get the artists and genres the user likes
         if(!artists.includes(matched[i].artist)) artists = artists + matched[i].artist + " ";
         let genre = matched[i].genre;
         genre.forEach((g: string) => {
@@ -44,7 +44,7 @@ router.get('/songs', validateTokenAndGetUser, async (req: Request, res: Response
             for (let h = 0; h < artist.length; h++) {
                 const similar: number = similarPercent(songSplit[g], artist[h]); // find similarity in names for more spelling mistakes
                 if (similar > 50) {
-                    match += 2; // get more artists matches than genres
+                    match += 2; // put artist matches higher in the list
                 }
             }
         }
