@@ -11,7 +11,7 @@ import { Song } from '../models/interface'
 
 const router: Router = express.Router();
 
-const upload: multer.Multer = multer({ dest: 'uploads/' });
+const upload: multer.Multer = multer({ dest: 'uploads/' }); // folder to store the files before upload to S3
 const unlinkFile = util.promisify(fs.unlink);
 
 router.get('/channel-songs', validateTokenAndGetUser, async (req: Request, res: Response) => { // all the songs the user uploaded
@@ -47,7 +47,7 @@ router.post('/upload', validateTokenAndGetUser, upload.single("file"), async (re
     const file: Express.Multer.File = req.file;
     const fileExtension = file.originalname.split('.').pop();
     if (!fileExtension?.includes('mp3') && !fileExtension?.includes('m4a')) {
-        await unlinkFile(file.path);
+        await unlinkFile(file.path); // delete the file from the server
         res.status(400).json({ message: "Invalid file type" });
         return;
     }
@@ -71,7 +71,7 @@ router.post('/upload', validateTokenAndGetUser, upload.single("file"), async (re
         return;
     }
     const songObj = await songsCollection.insertOne(song);
-    await unlinkFile(file.path); // delete the file from server
+    await unlinkFile(file.path); // delete the file from the server
     res.json({ songPath: `api/song/${songObj.insertedId}` });
 });
 
