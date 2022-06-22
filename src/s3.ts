@@ -2,7 +2,7 @@ import S3 from 'aws-sdk/clients/s3';
 import fs from 'fs';
 import internal from 'stream';
 
-const s3 = new S3({
+const s3 = new S3({ // Bucket configuration
     region: process.env.AWS_REGION,
     accessKeyId: process.env.AWS_ACCESS_KEY_ID,
     secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY
@@ -27,7 +27,7 @@ export function uploadFile(file: any): Promise<S3.ManagedUpload.SendData> {
 }
 
 export async function deleteFile(url: string): Promise<void> {
-    const fileName: string = url.split("/")[3];
+    const fileName: string = url.split("/")[3]; // gets the name in the end of the url
     await s3.deleteObject({
         Bucket: process.env.AWS_BUCKET_NAME || "",
         Key: fileName
